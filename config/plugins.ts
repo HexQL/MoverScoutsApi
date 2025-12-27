@@ -2,16 +2,34 @@ export default ({ env }) => {
   const isDev = env.bool('IS_DEV', false);
   const rootPath = isDev ? 'dev' : 'prod';
 
+  // Get AWS credentials
+  const accessKeyId = env('AWS_ACCESS_KEY_ID');
+  const secretAccessKey = env('AWS_ACCESS_SECRET');
+  const region = env('AWS_REGION');
+  const bucket = env('AWS_BUCKET');
+
+  // Validate required credentials
+  if (!accessKeyId || !secretAccessKey || !region || !bucket) {
+    const missing = [];
+    if (!accessKeyId) missing.push('AWS_ACCESS_KEY_ID');
+    if (!secretAccessKey) missing.push('AWS_ACCESS_SECRET');
+    if (!region) missing.push('AWS_REGION');
+    if (!bucket) missing.push('AWS_BUCKET');
+    
+    console.error(`[Strapi S3 Upload] Missing required environment variables: ${missing.join(', ')}`);
+    console.error('[Strapi S3 Upload] Please set these as Heroku Config Vars or in your .env file');
+  }
+
   return {
     upload: {
       config: {
         provider: 'aws-s3',
         providerOptions: {
-          accessKeyId: env('AWS_ACCESS_KEY_ID'),
-          secretAccessKey: env('AWS_ACCESS_SECRET'),
-          region: env('AWS_REGION'),
+          accessKeyId: accessKeyId,
+          secretAccessKey: secretAccessKey,
+          region: region,
           params: {
-            Bucket: env('AWS_BUCKET'),
+            Bucket: bucket,
             ACL: 'private',
           },
           baseUrl: env('AWS_BASE_URL', 'https://mover-scouts-bucket.s3.eu-central-1.amazonaws.com'),
