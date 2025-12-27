@@ -1,0 +1,212 @@
+{
+  "kind": "collectionType",
+  "collectionName": "players",
+  "info": {
+    "singularName": "player",
+    "pluralName": "players",
+    "displayName": "Player"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "club": {
+      "type": "string",
+      "default": "Free Agent"
+    },
+    "league": {
+      "type": "string",
+      "default": "Free Agent"
+    },
+    "position": {
+      "type": "string"
+    },
+    "secondaryPosition": {
+      "type": "string"
+    },
+    "jerseyNumber": {
+      "type": "integer"
+    },
+    "image1": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "birthDate": {
+      "type": "date",
+      "private": true,
+      "required": true
+    },
+    "age": {
+      "type": "integer"
+    },
+    "heightCm": {
+      "type": "integer"
+    },
+    "weightKg": {
+      "type": "integer"
+    },
+    "foot": {
+      "type": "string"
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "euStatus": {
+      "type": "boolean"
+    },
+    "youtubeVideoId": {
+      "type": "string"
+    },
+    "richTextMarkdown": {
+      "type": "richtext"
+    },
+    "smallInfoCard1Title": {
+      "type": "string"
+    },
+    "smallInfoCard1Content": {
+      "type": "string"
+    },
+    "smallInfoCard1Url": {
+      "type": "string"
+    },
+    "smallInfoCard1Highlighted": {
+      "type": "boolean"
+    },
+    "smallInfoCard2Title": {
+      "type": "string"
+    },
+    "smallInfoCard2Content": {
+      "type": "string"
+    },
+    "smallInfoCard2Url": {
+      "type": "string"
+    },
+    "smallInfoCard2Highlighted": {
+      "type": "boolean"
+    },
+    "smallInfoCard3Title": {
+      "type": "string"
+    },
+    "smallInfoCard3Content": {
+      "type": "string"
+    },
+    "smallInfoCard3Url": {
+      "type": "string"
+    },
+    "smallInfoCard3Highlighted": {
+      "type": "boolean"
+    },
+    "smallInfoCard4Title": {
+      "type": "string"
+    },
+    "smallInfoCard4Content": {
+      "type": "string"
+    },
+    "smallInfoCard4Url": {
+      "type": "string"
+    },
+    "smallInfoCard4Highlighted": {
+      "type": "boolean"
+    },
+    "smallInfoCard5Title": {
+      "type": "string"
+    },
+    "smallInfoCard5Content": {
+      "type": "string"
+    },
+    "smallInfoCard5Url": {
+      "type": "string"
+    },
+    "smallInfoCard5Highlighted": {
+      "type": "boolean"
+    },
+    "smallInfoCard6Title": {
+      "type": "string"
+    },
+    "smallInfoCard6Content": {
+      "type": "string"
+    },
+    "smallInfoCard6Url": {
+      "type": "string"
+    },
+    "smallInfoCard6Highlighted": {
+      "type": "boolean"
+    },
+    "wideInfoCardTitle": {
+      "type": "string"
+    },
+    "wideInfoCardContent": {
+      "type": "string"
+    },
+    "darkInfoCard1Title": {
+      "type": "string"
+    },
+    "darkInfoCard1Content": {
+      "type": "string"
+    },
+    "darkInfoCard1Url": {
+      "type": "string"
+    },
+    "darkInfoCard2Title": {
+      "type": "string"
+    },
+    "darkInfoCard2Content": {
+      "type": "string"
+    },
+    "darkInfoCard2Url": {
+      "type": "string"
+    },
+    "darkInfoCard3Title": {
+      "type": "string"
+    },
+    "darkInfoCard3Content": {
+      "type": "string"
+    },
+    "darkInfoCard3Url": {
+      "type": "string"
+    },
+    "agentReportedSpeed": {
+      "type": "float"
+    },
+    "agentReportedAcceleration": {
+      "type": "float"
+    },
+    "agentReportedStrength": {
+      "type": "float"
+    },
+    "agentReportedAgility": {
+      "type": "float"
+    },
+    "agentReportedStamina": {
+      "type": "float"
+    },
+    "agentReportedPassing": {
+      "type": "float"
+    },
+    "agentReportedBallControl": {
+      "type": "float"
+    },
+    "agentReportedFinishing": {
+      "type": "float"
+    },
+    "agentReportedHeading": {
+      "type": "float"
+    },
+    "agentReportedDefensiveDuels": {
+      "type": "float"
+    }
+  }
+}
