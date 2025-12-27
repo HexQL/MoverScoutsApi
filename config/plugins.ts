@@ -25,12 +25,14 @@ export default ({ env }) => {
       config: {
         provider: 'aws-s3',
         providerOptions: {
-          accessKeyId: accessKeyId,
-          secretAccessKey: secretAccessKey,
-          region: region,
-          params: {
-            Bucket: bucket,
-            ACL: 'private',
+          s3Options: {
+            region: region,
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
+            params: {
+              Bucket: bucket,
+              ACL: 'private',
+            },
           },
           baseUrl: env('AWS_BASE_URL', 'https://mover-scouts-bucket.s3.eu-central-1.amazonaws.com'),
           rootPath: rootPath,
