@@ -29,6 +29,10 @@ export default ({ env }) => {
             region: region,
             accessKeyId: accessKeyId,
             secretAccessKey: secretAccessKey,
+            credentials: {
+              accessKeyId: accessKeyId,
+              secretAccessKey: secretAccessKey,
+            },
             params: {
               Bucket: bucket,
               ACL: 'private',
