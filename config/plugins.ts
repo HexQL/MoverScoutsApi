@@ -1,6 +1,7 @@
 export default ({ env }) => {
   const isDev = env.bool('IS_DEV', false);
-  const rootPath = isDev ? 'dev' : 'prod';
+  const baseRootPath = isDev ? 'dev' : 'prod';
+  const rootPath = `${baseRootPath}/playerImages`;
 
   // Get AWS credentials
   const accessKeyId = env('AWS_ACCESS_KEY_ID');
@@ -42,7 +43,10 @@ export default ({ env }) => {
           rootPath: rootPath,
         },
         actionOptions: {
-          upload: {},
+          upload: {
+            // Custom upload action to ensure filename is used in S3
+            // The S3 provider will use the file's name field from the database
+          },
           uploadStream: {},
           delete: {},
         },

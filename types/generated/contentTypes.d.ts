@@ -452,6 +452,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     agentReportedSpeed: Schema.Attribute.Float;
     agentReportedStamina: Schema.Attribute.Float;
     agentReportedStrength: Schema.Attribute.Float;
+    averageViewerImpressionScore: Schema.Attribute.Decimal;
     birthDate: Schema.Attribute.Date &
       Schema.Attribute.Required &
       Schema.Attribute.Private;
@@ -513,13 +514,154 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     smallInfoCard6Highlighted: Schema.Attribute.Boolean;
     smallInfoCard6Title: Schema.Attribute.String;
     smallInfoCard6Url: Schema.Attribute.String;
+    supportState: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Voting active'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    uploadUser: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    viewer_impressions: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::viewer-impression.viewer-impression'
+    >;
+    viewerImpressionsCount: Schema.Attribute.Integer;
     weightKg: Schema.Attribute.Integer;
     wideInfoCardContent: Schema.Attribute.String;
     wideInfoCardTitle: Schema.Attribute.String;
     youtubeVideoId: Schema.Attribute.String;
+  };
+}
+
+export interface ApiRegistrationWhitelistRegistrationWhitelist
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'registration_whitelists';
+  info: {
+    displayName: 'RegistrationWhitelist';
+    pluralName: 'registration-whitelists';
+    singularName: 'registration-whitelist';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    isClubAdmin: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::registration-whitelist.registration-whitelist'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiViewerImpressionViewerImpression
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'viewer_impressions';
+  info: {
+    displayName: 'ViewerImpression';
+    pluralName: 'viewer-impressions';
+    singularName: 'viewer-impression';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    additionalNotes: Schema.Attribute.Text;
+    athleticism: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    consistency: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    decisionMaking: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::viewer-impression.viewer-impression'
+    > &
+      Schema.Attribute.Private;
+    overallScore: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    player: Schema.Attribute.Relation<'manyToOne', 'api::player.player'>;
+    positioningAndVision: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    technicalSkills: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    workRateAndIntensity: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 10;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
   };
 }
 
@@ -978,7 +1120,6 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -992,6 +1133,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    fullName: Schema.Attribute.String;
+    isClubAdmin: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1005,6 +1148,7 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    remainingUploads: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<3>;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
@@ -1034,6 +1178,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::player.player': ApiPlayerPlayer;
+      'api::registration-whitelist.registration-whitelist': ApiRegistrationWhitelistRegistrationWhitelist;
+      'api::viewer-impression.viewer-impression': ApiViewerImpressionViewerImpression;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

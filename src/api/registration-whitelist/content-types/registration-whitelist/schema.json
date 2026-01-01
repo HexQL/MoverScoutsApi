@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "registration_whitelists",
+  "info": {
+    "singularName": "registration-whitelist",
+    "pluralName": "registration-whitelists",
+    "displayName": "RegistrationWhitelist"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "isClubAdmin": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    }
+  }
+}
+

@@ -207,6 +207,27 @@
     },
     "agentReportedDefensiveDuels": {
       "type": "float"
+    },
+    "viewer_impressions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::viewer-impression.viewer-impression",
+      "mappedBy": "player"
+    },
+    "averageViewerImpressionScore": {
+      "type": "decimal"
+    },
+    "viewerImpressionsCount": {
+      "type": "integer"
+    },
+    "supportState": {
+      "type": "string",
+      "default": "Voting active"
+    },
+    "uploadUser": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
