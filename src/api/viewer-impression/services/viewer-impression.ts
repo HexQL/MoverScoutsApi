@@ -93,11 +93,18 @@ export default factories.createCoreService('api::viewer-impression.viewer-impres
 
     // Update the player record
     try {
+      const updateData: any = {
+        viewerImpressionsCount: newCount,
+        averageViewerImpressionScore: parseFloat(newAverage.toFixed(2)), // Ensure decimal format
+      };
+
+      // If count reaches 20, update supportState to "Pending Club Decision"
+      if (newCount >= 20) {
+        updateData.supportState = "Pending Club Decision";
+      }
+
       await strapi.entityService.update('api::player.player', playerId, {
-        data: {
-          viewerImpressionsCount: newCount,
-          averageViewerImpressionScore: parseFloat(newAverage.toFixed(2)), // Ensure decimal format
-        },
+        data: updateData,
       });
     } catch (updateError) {
       console.error('Error updating player viewer impression stats:', updateError);
