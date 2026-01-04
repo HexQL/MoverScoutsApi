@@ -529,7 +529,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     >;
     viewerImpressionsCount: Schema.Attribute.Integer;
     weightKg: Schema.Attribute.Integer;
-    wideInfoCardContent: Schema.Attribute.String;
+    wideInfoCardContent: Schema.Attribute.Text;
     wideInfoCardTitle: Schema.Attribute.String;
     youtubeVideoId: Schema.Attribute.String;
   };
