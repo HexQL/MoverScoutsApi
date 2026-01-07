@@ -79,6 +79,14 @@
       "type": "integer",
       "required": false,
       "default": 3
+    },
+    "isModerator": {
+      "type": "boolean",
+      "default": false
+    },
+    "canVote": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

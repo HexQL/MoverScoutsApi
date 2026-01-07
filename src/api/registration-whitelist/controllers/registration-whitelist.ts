@@ -66,6 +66,8 @@ export default factories.createCoreController('api::registration-whitelist.regis
 
       const whitelistData = whitelistEntries[0] as any;
       const isClubAdmin = whitelistData.isClubAdmin || false;
+      const isModerator = whitelistData.isModerator || false;
+      const canVote = whitelistData.canVote !== undefined ? whitelistData.canVote : true; // Default to true if not specified
 
       // Generate username from email (required by Strapi)
       // Take the part before @ and ensure it's unique
@@ -127,6 +129,8 @@ export default factories.createCoreController('api::registration-whitelist.regis
         password,
         fullName: fullName.trim(),
         isClubAdmin: isClubAdmin,
+        isModerator: isModerator,
+        canVote: canVote,
         role: defaultRole.id,
         confirmed: true, // Auto-confirm users
         blocked: false,
@@ -147,6 +151,8 @@ export default factories.createCoreController('api::registration-whitelist.regis
           email: newUser.email,
           fullName: newUser.fullName || fullName.trim(),
           isClubAdmin: newUser.isClubAdmin || false,
+          isModerator: newUser.isModerator || false,
+          canVote: newUser.canVote !== undefined ? newUser.canVote : true,
         },
       });
     } catch (err: any) {

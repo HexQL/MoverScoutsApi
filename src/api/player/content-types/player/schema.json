@@ -222,12 +222,23 @@
     },
     "supportState": {
       "type": "string",
-      "default": "Voting active"
+      "default": "Pending review"
     },
     "uploadUser": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "needsModeratorCheck": {
+      "type": "boolean",
+      "default": true
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": true
+    },
+    "moderatorMessage": {
+      "type": "text"
     }
   }
 }

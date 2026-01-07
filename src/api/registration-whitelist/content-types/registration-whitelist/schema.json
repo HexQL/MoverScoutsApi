@@ -20,7 +20,14 @@
       "type": "boolean",
       "required": false,
       "default": false
+    },
+    "isModerator": {
+      "type": "boolean",
+      "default": false
+    },
+    "canVote": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
-

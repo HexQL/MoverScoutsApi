@@ -472,6 +472,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     euStatus: Schema.Attribute.Boolean;
     foot: Schema.Attribute.String;
     heightCm: Schema.Attribute.Integer;
+    hidden: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     image1: Schema.Attribute.Media<'images'>;
     jerseyNumber: Schema.Attribute.Integer;
     league: Schema.Attribute.String & Schema.Attribute.DefaultTo<'Free Agent'>;
@@ -481,8 +482,11 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
       'api::player.player'
     > &
       Schema.Attribute.Private;
+    moderatorMessage: Schema.Attribute.Text;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     nationality: Schema.Attribute.String;
+    needsModeratorCheck: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
     position: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     richTextMarkdown: Schema.Attribute.RichText;
@@ -515,7 +519,7 @@ export interface ApiPlayerPlayer extends Struct.CollectionTypeSchema {
     smallInfoCard6Title: Schema.Attribute.String;
     smallInfoCard6Url: Schema.Attribute.String;
     supportState: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'Voting active'>;
+      Schema.Attribute.DefaultTo<'Pending review'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -547,6 +551,7 @@ export interface ApiRegistrationWhitelistRegistrationWhitelist
     draftAndPublish: false;
   };
   attributes: {
+    canVote: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -554,6 +559,7 @@ export interface ApiRegistrationWhitelistRegistrationWhitelist
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     isClubAdmin: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    isModerator: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1123,6 +1129,7 @@ export interface PluginUsersPermissionsUser
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    canVote: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -1135,6 +1142,7 @@ export interface PluginUsersPermissionsUser
       }>;
     fullName: Schema.Attribute.String;
     isClubAdmin: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    isModerator: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

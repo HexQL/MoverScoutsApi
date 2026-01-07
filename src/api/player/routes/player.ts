@@ -53,6 +53,15 @@ export default {
       },
     },
     {
+      method: 'POST',
+      path: '/players/submit-moderator-decision',
+      handler: 'player.submitModeratorDecision',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
       method: 'GET',
       path: '/players/:id',
       handler: 'player.findOne',

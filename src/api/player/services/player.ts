@@ -130,6 +130,11 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
       image1,
     } = playerData;
 
+    // Store original uploadUser ID to preserve it when updating (for moderators editing existing players)
+    let originalUploadUserId: number | null = null;
+    let isModerator = false;
+    let uploadUserId: number | null = null;
+
     // If playerId is provided, verify the player exists and belongs to the user
     if (playerId) {
       const existingPlayer = await strapi.entityService.findOne('api::player.player', playerId, {
@@ -140,13 +145,22 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
         return { error: 'PLAYER_NOT_FOUND' };
       }
 
-      // Check if the player was created by this user
+      // Check if the player was created by this user, or if the user is a moderator
       const playerData = (existingPlayer as any).attributes || existingPlayer;
-      const uploadUserId = playerData.uploadUser?.id || playerData.uploadUser;
+      uploadUserId = playerData.uploadUser?.id || playerData.uploadUser;
 
-      if (uploadUserId !== user.id) {
+      // Fetch full user data to check if user is a moderator
+      const currentUser = await strapi.entityService.findOne('plugin::users-permissions.user', user.id);
+      const userData = (currentUser as any).attributes || currentUser;
+      isModerator = userData.isModerator === true;
+
+      // Allow edit if user is the uploader OR if user is a moderator
+      if (uploadUserId !== user.id && !isModerator) {
         return { error: 'UNAUTHORIZED' };
       }
+
+      // Store the original uploadUser ID to preserve it when updating
+      originalUploadUserId = uploadUserId;
     } else {
       // This is a new player creation - check remainingUploads
       const currentUser = await strapi.entityService.findOne('plugin::users-permissions.user', user.id);
@@ -230,8 +244,17 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
       agentReportedFinishing: agentReportedFinishing ? parseFloat(agentReportedFinishing) : null,
       agentReportedHeading: agentReportedHeading ? parseFloat(agentReportedHeading) : null,
       agentReportedDefensiveDuels: agentReportedDefensiveDuels ? parseFloat(agentReportedDefensiveDuels) : null,
-      uploadUser: user.id, // Always set uploadUser to the authenticated user
+      // Preserve original uploadUser if editing existing player, otherwise set to current user
+      uploadUser: playerId && originalUploadUserId ? originalUploadUserId : user.id,
     };
+
+    // If the uploader (not a moderator) is editing the player, reset moderator status
+    if (playerId && uploadUserId === user.id) {
+      // Clear moderator message and reset to pending review
+      dataToSave.moderatorMessage = '';
+      dataToSave.needsModeratorCheck = true;
+      dataToSave.hidden = true;
+    }
 
     // Handle image upload - upload to Strapi media library first, then save ID
     let image1Id: number | null = null;
