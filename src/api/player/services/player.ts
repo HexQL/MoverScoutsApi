@@ -161,24 +161,6 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
 
       // Store the original uploadUser ID to preserve it when updating
       originalUploadUserId = uploadUserId;
-    } else {
-      // This is a new player creation - check remainingUploads
-      const currentUser = await strapi.entityService.findOne('plugin::users-permissions.user', user.id);
-      const userData = (currentUser as any).attributes || currentUser;
-      const remainingUploads = userData.remainingUploads ?? 3; // Default to 3 if not set
-      
-      if (remainingUploads <= 0) {
-        return { error: 'NO_REMAINING_UPLOADS' };
-      }
-      
-      // Check community upload limit (hardcoded to 20)
-      const COMMUNITY_UPLOAD_LIMIT = 20;
-      const communityCountResult = await this.getCommunityUploadedPlayersCount();
-      const communityCount = communityCountResult.count || 0;
-      
-      if (communityCount >= COMMUNITY_UPLOAD_LIMIT) {
-        return { error: 'COMMUNITY_UPLOAD_LIMIT_REACHED' };
-      }
     }
 
     // Prepare data object for create/update
@@ -392,23 +374,6 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
         data: dataToSave,
         populate: ['image1'], // Populate image1 to return the full image data
       });
-      
-      // Decrement remainingUploads for the user
-      try {
-        const currentUser = await strapi.entityService.findOne('plugin::users-permissions.user', user.id);
-        const userData = (currentUser as any).attributes || currentUser;
-        const currentRemainingUploads = userData.remainingUploads ?? 3;
-        const newRemainingUploads = Math.max(0, currentRemainingUploads - 1);
-        
-        await strapi.entityService.update('plugin::users-permissions.user', user.id, {
-          data: {
-            remainingUploads: newRemainingUploads,
-          },
-        });
-      } catch (updateError) {
-        console.error(`Error updating remainingUploads for user ${user.id}:`, updateError);
-        // Don't fail the player creation if this update fails, but log it
-      }
     }
 
     return {

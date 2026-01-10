@@ -176,12 +176,6 @@ export default factories.createCoreController('api::player.player', ({ strapi })
         if (result.error === 'IMAGE_UPLOAD_FAILED') {
           return ctx.badRequest('Image upload failed', { details: result.details });
         }
-        if (result.error === 'NO_REMAINING_UPLOADS') {
-          return ctx.forbidden('You have no remaining uploads. Please contact support to increase your upload limit.');
-        }
-        if (result.error === 'COMMUNITY_UPLOAD_LIMIT_REACHED') {
-          return ctx.forbidden('The community upload limit of 20 players has been reached. No new players can be uploaded at this time.');
-        }
       }
 
       return ctx.send(result);
