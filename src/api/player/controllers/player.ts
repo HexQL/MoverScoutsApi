@@ -287,7 +287,7 @@ export default factories.createCoreController('api::player.player', ({ strapi })
       } else if (decision === 'Reject') {
         updateData.hidden = true;
         updateData.moderatorMessage = changeRequestMessage || '';
-        updateData.supportState = 'Rejected';
+        updateData.supportState = 'Rejected by moderator';
       } else if (decision === 'Request Changes') {
         updateData.hidden = true;
         updateData.moderatorMessage = changeRequestMessage || '';
