@@ -289,10 +289,10 @@ export default factories.createCoreController('api::player.player', ({ strapi })
       if (decision === 'Approve') {
         updateData.hidden = false;
         updateData.moderatorMessage = '';
-        updateData.supportState = 'Pending Review';
+        updateData.supportState = 'Voting active';
       } else if (decision === 'Reject') {
         updateData.hidden = true;
-        updateData.moderatorMessage = '';
+        updateData.moderatorMessage = changeRequestMessage || '';
         updateData.supportState = 'Rejected';
       } else if (decision === 'Request Changes') {
         updateData.hidden = true;

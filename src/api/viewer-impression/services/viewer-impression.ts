@@ -99,9 +99,9 @@ export default factories.createCoreService('api::viewer-impression.viewer-impres
       };
 
       // If count reaches 20, update supportState to "Pending Club Decision"
-      if (newCount >= 20) {
+      /*if (newCount >= 20) {
         updateData.supportState = "Pending Club Decision";
-      }
+      }*/
 
       await strapi.entityService.update('api::player.player', playerId, {
         data: updateData,
