@@ -9,76 +9,44 @@ export default factories.createCoreController('api::player.player', ({ strapi })
     // Override the default find to ensure uploadUser is included in the response
     const sanitizedQuery = await this.sanitizeQuery(ctx);
     
-    // Fetch using entityService - omit fields to get all fields including uploadUser
+    // Fetch using entityService with uploadUser and image1 populated
     const entities = await strapi.entityService.findMany('api::player.player', {
       ...sanitizedQuery,
+      populate: ['uploadUser', 'image1'],
     });
     
-    // Process entities to ensure uploadUser is included in the response
+    // Process entities to ensure uploadUser is included in the response as an ID
     const processedEntities = Array.isArray(entities) ? entities : [entities];
-    const entitiesWithUploadUser = await Promise.all(processedEntities.map(async (entity: any) => {
+    const entitiesWithUploadUser = processedEntities.map((entity: any) => {
       // Handle Strapi v5 structure
       const entityData = entity.attributes || entity;
       const entityId = entity.id || entityData.id;
       
-      // Always fetch uploadUser ID directly from the database to ensure we get it
+      // Extract uploadUser ID from the populated relation
       let uploadUserId: number | null = null;
-      
-      try {
-        // For oneToOne relations in Strapi, the foreign key is stored in the player table
-        // Query using raw SQL to get the uploadUser ID directly
-        const knex = strapi.db.connection;
-        const result = await knex('players')
-          .where('id', entityId)
-          .select('upload_user_id')
-          .first();
-        
-        if (result && result.upload_user_id) {
-          uploadUserId = result.upload_user_id;
-        } else {
-          // Try alternative column name (Strapi might use different naming)
-          const result2 = await knex('players')
-            .where('id', entityId)
-            .select('uploadUser')
-            .first();
-          
-          if (result2 && result2.uploadUser) {
-            uploadUserId = result2.uploadUser;
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching uploadUser for player:', entityId, err);
-        // Fallback: try entityService with populate
-        try {
-          const fullEntity = await strapi.entityService.findOne('api::player.player', entityId, {
-            populate: ['uploadUser'],
-          });
-          if (fullEntity) {
-            const fullEntityData = (fullEntity as any).attributes || fullEntity;
-            if (fullEntityData.uploadUser) {
-              if (typeof fullEntityData.uploadUser === 'object' && fullEntityData.uploadUser !== null) {
-                uploadUserId = fullEntityData.uploadUser.id || null;
-              } else if (typeof fullEntityData.uploadUser === 'number') {
-                uploadUserId = fullEntityData.uploadUser;
-              }
-            }
-          }
-        } catch (err2) {
-          console.error('Error in fallback fetch:', err2);
+      if (entityData.uploadUser) {
+        if (typeof entityData.uploadUser === 'object' && entityData.uploadUser !== null) {
+          uploadUserId = entityData.uploadUser.id || null;
+        } else if (typeof entityData.uploadUser === 'number') {
+          uploadUserId = entityData.uploadUser;
         }
       }
       
-      // Build the response object ensuring uploadUser is included
+      // Preserve image1 structure (keep the full media object)
+      const image1Data = entityData.image1;
+      
+      // Build the response object ensuring uploadUser is included as an ID and image1 is preserved
       const responseItem = {
         id: entityId,
         attributes: {
           ...entityData,
           uploadUser: uploadUserId, // Explicitly set uploadUser to the ID
+          image1: image1Data, // Explicitly preserve image1 structure
         }
       };
       
       return responseItem;
-    }));
+    });
     
     const result = Array.isArray(entities) ? entitiesWithUploadUser : entitiesWithUploadUser[0];
     
