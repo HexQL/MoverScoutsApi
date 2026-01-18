@@ -84,37 +84,40 @@ async function sendWelcomeEmail(userEmail: string, userName: string) {
             <div style="border-radius: 12px; overflow: hidden;">
               <div class="email-container" style="background-color: #fef2f2; padding: 20px;">
                 <div class="email-title-card" style="background-color: #E9001D; padding: 32px; border-radius: 8px; margin-bottom: 24px; margin-top: 0; box-shadow: 0 4px 12px rgba(233, 0, 29, 0.2);">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold; text-align: center;">Welcome to NK Tabor Moverball!</h1>
+                  <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: bold; text-align: center;">Welcome to NK Tabor x Mover scouting</h1>
                 </div>
                 
                 <div class="email-card" style="background-color: #ffffff; padding: 32px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
                   <p style="margin: 0 0 16px 0; font-size: 18px; color: #1e293b;">Hello <strong>${userName}</strong>,</p>
                   
                   <p style="margin: 0 0 16px 0; font-size: 18px; color: #334155;">
-                    We're excited to have you join our community! Your account has been successfully created and you're now part of the NK Tabor Moverball team.
+                    Your account is ready.<br>
+                    You're now part of the NK Tabor Sežana x Mover scouting community.<br>
+                    Your input contributes to real shortlists and real trial opportunities.
                   </p>
                   
                   <div style="background-color: #FEE2E7; border-left: 4px solid #E9001D; padding: 20px; margin: 24px 0; border-radius: 4px;">
-                    <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: bold; color: #C20019;">What can you do now?</p>
+                    <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: bold; color: #C20019;">What you can do now</p>
                     <ul style="margin: 0; padding-left: 24px; font-size: 16px; color: #475569;">
-                      <li style="margin-bottom: 8px;">Browse the player list and support your favorites</li>
-                      <li style="margin-bottom: 8px;">Submit new players for our campaign</li>
-                      <li style="margin-bottom: 8px;">Engage with the community and share your opinions</li>
-                      <li style="margin-bottom: 8px;">Track the campaign progress in real-time</li>
+                      <li style="margin-bottom: 8px;">Review and evaluate players in the current pool</li>
+                      <li style="margin-bottom: 8px;">Submit your scouting assessments</li>
+                      <li style="margin-bottom: 8px;">Receive feedback as players progress through the scouting process</li>
+                      <li style="margin-bottom: 8px;">Follow which players move to the next stage</li>
+                      <li style="margin-bottom: 8px;">Be recognized and rewarded when players you supported progress to trials or contracts</li>
                     </ul>
                   </div>
                   
                   <div style="text-align: center; margin: 32px 0;">
-                    <a href="https://nktabor.moverball.com/players" style="display: inline-block; background-color: #E9001D; color: #ffffff; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px; font-weight: bold; transition: background-color 0.3s;">Get Started</a>
+                    <a href="https://nktabor.moverball.com/players" style="display: inline-block; background-color: #E9001D; color: #ffffff; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px; font-weight: bold; transition: background-color 0.3s;">Start Scouting</a>
                   </div>
                   
                   <div style="padding-top: 24px; border-top: 2px solid #FEE2E7; margin-top: 24px;">
                     <p style="margin: 0 0 8px 0; font-size: 16px; color: #64748b;">
-                      If you have any questions or need assistance, please contact us via email.
+                      If you need help or have questions, you can reach us via email.
                     </p>
                     <p style="margin: 16px 0 0 0; font-size: 18px; color: #1e293b;">
                       Best regards,<br>
-                      <strong style="color: #E9001D;">The NK Tabor Moverball Team</strong>
+                      <strong style="color: #E9001D;">NK Tabor Sežana × Mover</strong>
                     </p>
                   </div>
                 </div>
@@ -132,24 +135,27 @@ async function sendWelcomeEmail(userEmail: string, userName: string) {
 
     // Email plain text version
     const emailText = `
-Welcome to NK Tabor Moverball!
+Welcome to NK Tabor x Mover scouting
 
 Hello ${userName},
 
-We're excited to have you join our community! Your account has been successfully created and you're now part of the NK Tabor Moverball team.
+Your account is ready. 
+You're now part of the NK Tabor Sežana x Mover scouting community.
+Your input contributes to real shortlists and real trial opportunities.
 
-What can you do now?
-- Browse the player list and support your favorites
-- Submit new players for our campaign
-- Engage with the community and share your opinions
-- Track the campaign progress in real-time
+What you can do now
+- Review and evaluate players in the current pool
+- Submit your scouting assessments
+- Receive feedback as players progress through the scouting process
+- Follow which players move to the next stage
+- Be recognized and rewarded when players you supported progress to trials or contracts
 
-Get Started: https://nktabor.moverball.com/players
+Start Scouting: https://nktabor.moverball.com/players
 
-If you have any questions or need assistance, please contact us via email.
+If you need help or have questions, you can reach us via email.
 
 Best regards,
-The NK Tabor Moverball Team
+NK Tabor Sežana × Mover
 
 © ${new Date().getFullYear()} NK Tabor Moverball. All rights reserved.
     `;
@@ -158,7 +164,7 @@ The NK Tabor Moverball Team
     const mailOptions = {
       from: `"${smtpFromName}" <${smtpFromEmail}>`,
       to: userEmail,
-      subject: 'Welcome to NK Tabor Moverball!',
+      subject: 'Welcome to NK Tabor x Mover scouting',
       text: emailText,
       html: emailHtml,
     };
