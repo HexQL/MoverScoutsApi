@@ -362,24 +362,72 @@ export default factories.createCoreService('api::player.player', ({ strapi }) =>
     }
 
     let result;
-    if (playerId) {
-      // Update existing player
-      result = await strapi.entityService.update('api::player.player', playerId, {
-        data: dataToSave,
-        populate: ['image1'], // Populate image1 to return the full image data
-      });
-    } else {
-      // Create new player
-      result = await strapi.entityService.create('api::player.player', {
-        data: dataToSave,
-        populate: ['image1'], // Populate image1 to return the full image data
-      });
-    }
+    try {
+      if (playerId) {
+        // Update existing player
+        result = await strapi.entityService.update('api::player.player', playerId, {
+          data: dataToSave,
+          populate: ['image1'], // Populate image1 to return the full image data
+        });
+      } else {
+        // Create new player
+        result = await strapi.entityService.create('api::player.player', {
+          data: dataToSave,
+          populate: ['image1'], // Populate image1 to return the full image data
+        });
+      }
 
-    return {
-      success: true,
-      player: result,
-    };
+      return {
+        success: true,
+        player: result,
+      };
+    } catch (validationError: any) {
+      // Strapi validation errors contain detailed field information
+      let errorMessage = 'Validation failed'
+      const missingFields: string[] = []
+
+      // Check for Strapi validation error structure
+      if (validationError?.message) {
+        errorMessage = validationError.message
+        
+        // Parse Strapi validation errors (they often contain field names)
+        const errorMsg = validationError.message.toLowerCase()
+        
+        // Check for required field errors
+        if (errorMsg.includes('name') || errorMsg.includes('slug')) {
+          missingFields.push('name')
+        }
+        if (errorMsg.includes('position')) {
+          missingFields.push('position')
+        }
+        if (errorMsg.includes('birth') || errorMsg.includes('birthdate')) {
+          missingFields.push('birthDate')
+        }
+        if (errorMsg.includes('image')) {
+          missingFields.push('image1')
+        }
+      }
+
+      // If we found specific fields, create a detailed error message
+      if (missingFields.length > 0) {
+        const fieldNames = missingFields.map(field => {
+          const fieldMap: { [key: string]: string } = {
+            'name': 'Name',
+            'position': 'Position',
+            'birthDate': 'Birth Date',
+            'image1': 'Player Image'
+          }
+          return fieldMap[field] || field
+        })
+        errorMessage = `Please fill in the following required fields: ${fieldNames.join(', ')}`
+      }
+
+      return {
+        error: 'VALIDATION_ERROR',
+        message: errorMessage,
+        missingFields: missingFields,
+      };
+    }
   },
 
   async deletePlayer({ user, playerId }) {

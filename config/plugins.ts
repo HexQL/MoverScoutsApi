@@ -21,6 +21,14 @@ export default ({ env }) => {
     console.error('[Strapi S3 Upload] Please set these as Heroku Config Vars or in your .env file');
   }
 
+  // Get SMTP configuration for email
+  const smtpHost = env('SMTP_HOST');
+  const smtpPort = env.int('SMTP_PORT', 587);
+  const smtpUser = env('SMTP_USER');
+  const smtpPassword = env('SMTP_PASSWORD');
+  const smtpFromEmail = env('SMTP_FROM_EMAIL');
+  const smtpFromName = env('SMTP_FROM_NAME', 'NK Tabor Moverball');
+
   return {
     upload: {
       config: {
@@ -61,6 +69,24 @@ export default ({ env }) => {
             'image/webp',
             'image/svg+xml',
           ],
+        },
+      },
+    },
+    email: {
+      config: {
+        provider: 'nodemailer',
+        providerOptions: {
+          host: smtpHost,
+          port: smtpPort,
+          secure: smtpPort === 465, // true for 465, false for other ports
+          auth: {
+            user: smtpUser,
+            pass: smtpPassword,
+          },
+        },
+        settings: {
+          defaultFrom: `"${smtpFromName}" <${smtpFromEmail}>`,
+          defaultReplyTo: smtpFromEmail,
         },
       },
     },

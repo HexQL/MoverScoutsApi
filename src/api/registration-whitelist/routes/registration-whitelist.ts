@@ -9,6 +9,16 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/registration-whitelists/forgot-password',
+      handler: 'registration-whitelist.forgotPassword',
+      config: {
+        policies: [],
+        middlewares: [],
+        auth: false, // Public endpoint
+      },
+    },
   ],
 };
 

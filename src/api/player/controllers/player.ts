@@ -176,11 +176,23 @@ export default factories.createCoreController('api::player.player', ({ strapi })
         if (result.error === 'IMAGE_UPLOAD_FAILED') {
           return ctx.badRequest('Image upload failed', { details: result.details });
         }
+        if (result.error === 'VALIDATION_ERROR') {
+          // Return detailed validation error with missing fields
+          return ctx.badRequest(result.message || 'Validation failed', { 
+            error: result.message,
+            missingFields: result.missingFields || []
+          });
+        }
       }
 
       return ctx.send(result);
-    } catch (err) {
-      return ctx.badRequest('Invalid request', { error: err.message });
+    } catch (err: any) {
+      // Try to extract more details from the error
+      let errorMessage = 'Invalid request'
+      if (err?.message) {
+        errorMessage = err.message
+      }
+      return ctx.badRequest(errorMessage, { error: errorMessage });
     }
   },
 
