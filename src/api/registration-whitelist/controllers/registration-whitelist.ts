@@ -116,7 +116,7 @@ async function sendWelcomeEmail(userEmail: string, userName: string) {
                       If you need help or have questions, you can reach us via email.
                     </p>
                     <p style="margin: 16px 0 0 0; font-size: 18px; color: #1e293b;">
-                      Best regards,<br>
+                      Let's make the move together,<br>
                       <strong style="color: #E9001D;">NK Tabor Sežana × Mover</strong>
                     </p>
                   </div>
@@ -154,7 +154,7 @@ Start Scouting: https://nktabor.moverball.com/players
 
 If you need help or have questions, you can reach us via email.
 
-Best regards,
+Let's make the move together,
 NK Tabor Sežana × Mover
 
 © ${new Date().getFullYear()} NK Tabor Moverball. All rights reserved.
@@ -320,7 +320,7 @@ Reset Your Password
 
 Hello${userName ? ` ${userName}` : ''},
 
-We received a request to reset your password for your NK Tabor Moverball account.
+We received a request to reset your password for your NK Tabor x Mover scouting account.
 
 Click the link below to reset your password:
 ${resetPasswordUrl}
@@ -329,17 +329,16 @@ Security tip: This link will expire after you use it. If you didn't request a pa
 
 If you have any questions or need assistance, please contact us via email.
 
-Best regards,
-The NK Tabor Moverball Team
+NK Tabor Sežana × Mover
 
-© ${new Date().getFullYear()} NK Tabor Moverball. All rights reserved.
+© ${new Date().getFullYear()} NK Tabor x Mover. All rights reserved.
     `;
 
     // Prepare email options
     const mailOptions = {
       from: `"${smtpFromName}" <${smtpFromEmail}>`,
       to: userEmail,
-      subject: 'Reset Your Password - NK Tabor Moverball',
+      subject: 'Reset Your Password - NK Tabor x Mover scouting',
       text: emailText,
       html: emailHtml,
     };
