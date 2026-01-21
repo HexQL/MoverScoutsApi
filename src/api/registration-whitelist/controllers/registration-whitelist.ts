@@ -399,27 +399,25 @@ export default factories.createCoreController('api::registration-whitelist.regis
         return ctx.badRequest('Email already exists');
       }
 
-      // Check if email is in registration whitelist
-      const whitelistEntries = await strapi.entityService.findMany(
-        'api::registration-whitelist.registration-whitelist' as any,
-        {
-          filters: {
-            email: {
-              $eq: email.toLowerCase().trim(),
-            },
-          },
-          limit: 1,
-        }
-      );
+      // Check if email is in registration whitelist (case-insensitive)
+      const normalizedEmail = email.toLowerCase().trim();
+      
+      // Use database-level case-insensitive comparison (PostgreSQL ILIKE or LOWER())
+      // Note: Knex returns snake_case column names, so we need to check both camelCase and snake_case
+      const knex = strapi.db.connection;
+      const whitelistEntry = await knex('registration_whitelists')
+        .whereRaw('LOWER(TRIM(email)) = ?', [normalizedEmail])
+        .first();
 
-      if (!whitelistEntries || whitelistEntries.length === 0) {
+      if (!whitelistEntry) {
         return ctx.forbidden('Registration is currently restricted. Your email is not on the whitelist.');
       }
 
-      const whitelistData = whitelistEntries[0] as any;
-      const isClubAdmin = whitelistData.isClubAdmin || false;
-      const isModerator = whitelistData.isModerator || false;
-      const canVote = whitelistData.canVote !== undefined ? whitelistData.canVote : true; // Default to true if not specified
+      const whitelistData = whitelistEntry as any;
+      // Handle both camelCase (from entityService) and snake_case (from raw Knex query)
+      const isClubAdmin = whitelistData.isClubAdmin ?? whitelistData.is_club_admin ?? false;
+      const isModerator = whitelistData.isModerator ?? whitelistData.is_moderator ?? false;
+      const canVote = whitelistData.canVote ?? whitelistData.can_vote ?? true; // Default to true if not specified
 
       // Generate username from email (required by Strapi)
       // Take the part before @ and ensure it's unique

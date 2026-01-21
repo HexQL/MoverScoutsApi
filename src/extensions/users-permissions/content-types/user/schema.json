@@ -78,7 +78,7 @@
     "remainingUploads": {
       "type": "integer",
       "required": false,
-      "default": 3
+      "default": 10
     },
     "isModerator": {
       "type": "boolean",

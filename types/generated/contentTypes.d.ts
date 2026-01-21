@@ -1156,7 +1156,7 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
-    remainingUploads: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<3>;
+    remainingUploads: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<10>;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
