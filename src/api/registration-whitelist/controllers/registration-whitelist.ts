@@ -357,6 +357,89 @@ The NK Tabor Moverball Team
 }
 
 export default factories.createCoreController('api::registration-whitelist.registration-whitelist', ({ strapi }) => ({
+  async bulkInsert(ctx) {
+    try {
+      const { emails } = ctx.request.body;
+
+      // Validate input
+      if (!emails || !Array.isArray(emails)) {
+        return ctx.badRequest('Request body must contain an "emails" array');
+      }
+
+      if (emails.length === 0) {
+        return ctx.badRequest('Emails array cannot be empty');
+      }
+
+      // Validate email format for all emails
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const invalidEmails = emails.filter((email: string) => !emailRegex.test(email));
+      if (invalidEmails.length > 0) {
+        return ctx.badRequest(`Invalid email format(s): ${invalidEmails.join(', ')}`);
+      }
+
+      const knex = strapi.db.connection;
+      const results = {
+        created: [] as string[],
+        skipped: [] as string[],
+        errors: [] as string[],
+      };
+
+      // Process each email
+      for (const email of emails) {
+        try {
+          const normalizedEmail = email.toLowerCase().trim();
+
+          // Check if email already exists (case-insensitive)
+          const existingEntry = await knex('registration_whitelists')
+            .whereRaw('LOWER(TRIM(email)) = ?', [normalizedEmail])
+            .first();
+
+          if (existingEntry) {
+            results.skipped.push(normalizedEmail);
+            continue;
+          }
+
+          // Create new whitelist entry
+          await strapi.entityService.create(
+            'api::registration-whitelist.registration-whitelist',
+            {
+              data: {
+                email: normalizedEmail,
+                canVote: true,
+                isClubAdmin: false,
+                isModerator: false,
+              },
+            }
+          );
+
+          results.created.push(normalizedEmail);
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          results.errors.push(`${email}: ${errorMessage}`);
+          console.error(`Error processing email ${email}:`, error);
+        }
+      }
+
+      return ctx.send({
+        success: true,
+        message: `Processed ${emails.length} email(s)`,
+        results: {
+          created: results.created.length,
+          skipped: results.skipped.length,
+          errors: results.errors.length,
+          createdEmails: results.created,
+          skippedEmails: results.skipped,
+          errorDetails: results.errors,
+        },
+      });
+    } catch (error) {
+      console.error('Error in bulkInsert:', error);
+      return ctx.internalServerError(
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      );
+    }
+  },
+
   async register(ctx) {
     try {
       const { fullName, email, password } = ctx.request.body;

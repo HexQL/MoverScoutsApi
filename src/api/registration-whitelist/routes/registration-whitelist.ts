@@ -19,6 +19,15 @@ export default {
         auth: false, // Public endpoint
       },
     },
+    {
+      method: 'POST',
+      path: '/registration-whitelists/bulk-insert',
+      handler: 'registration-whitelist.bulkInsert',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };
 
