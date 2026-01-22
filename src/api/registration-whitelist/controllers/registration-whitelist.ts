@@ -272,7 +272,7 @@ async function sendPasswordResetEmail(userEmail: string, resetToken: string, use
                   <p style="margin: 0 0 16px 0; font-size: 18px; color: #1e293b;">Hello${userName ? ` <strong>${userName}</strong>` : ''},</p>
                   
                   <p style="margin: 0 0 16px 0; font-size: 18px; color: #334155;">
-                    We received a request to reset your password for your NK Tabor Moverball account.
+                    We received a request to reset your password for your NK Tabor x Mover scouting account.
                   </p>
                   
                   <div style="text-align: center; margin: 32px 0;">
@@ -297,14 +297,13 @@ async function sendPasswordResetEmail(userEmail: string, resetToken: string, use
                       If you have any questions or need assistance, please contact us via email.
                     </p>
                     <p style="margin: 16px 0 0 0; font-size: 18px; color: #1e293b;">
-                      Best regards,<br>
-                      <strong style="color: #E9001D;">The NK Tabor Moverball Team</strong>
+                      <strong style="color: #E9001D;">NK Tabor Sežana × Mover</strong>
                     </p>
                   </div>
                 </div>
                 
                 <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 14px;">
-                  <p style="margin: 0;">© ${new Date().getFullYear()} NK Tabor Moverball. All rights reserved.</p>
+                  <p style="margin: 0;">© ${new Date().getFullYear()} NK Tabor x Mover. All rights reserved.</p>
                 </div>
               </div>
             </div>
