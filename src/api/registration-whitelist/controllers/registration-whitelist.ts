@@ -108,7 +108,7 @@ async function sendWelcomeEmail(userEmail: string, userName: string) {
                   </div>
                   
                   <div style="text-align: center; margin: 32px 0;">
-                    <a href="https://nktabor.moverball.com/players" style="display: inline-block; background-color: #E9001D; color: #ffffff; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px; font-weight: bold; transition: background-color 0.3s;">Start Scouting</a>
+                    <a href="https://taborunited.moverball.com/players" style="display: inline-block; background-color: #E9001D; color: #ffffff; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-size: 18px; font-weight: bold; transition: background-color 0.3s;">Start Scouting</a>
                   </div>
                   
                   <div style="padding-top: 24px; border-top: 2px solid #FEE2E7; margin-top: 24px;">
@@ -150,7 +150,7 @@ What you can do now
 - Follow which players move to the next stage
 - Be recognized and rewarded when players you supported progress to trials or contracts
 
-Start Scouting: https://nktabor.moverball.com/players
+Start Scouting: https://taborunited.moverball.com/players
 
 If you need help or have questions, you can reach us via email.
 
@@ -192,7 +192,7 @@ async function sendPasswordResetEmail(userEmail: string, resetToken: string, use
     const smtpFromEmail = process.env.SMTP_FROM_EMAIL;
     const smtpFromName = process.env.SMTP_FROM_NAME || 'NK Tabor Moverball';
     // Get frontend URL - ensure it's a full URL (not relative)
-    let frontendUrl = process.env.FRONTEND_URL || 'https://nktabor.moverball.com';
+    let frontendUrl = process.env.FRONTEND_URL || 'https://taborunited.moverball.com';
     // Ensure it doesn't have a trailing slash
     frontendUrl = frontendUrl.replace(/\/$/, '');
     const resetPasswordUrl = `${frontendUrl}/reset-password?code=${resetToken}`;
