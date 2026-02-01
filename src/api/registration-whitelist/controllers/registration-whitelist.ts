@@ -677,5 +677,26 @@ export default factories.createCoreController('api::registration-whitelist.regis
       });
     }
   },
+
+  async getAllUserEmails(ctx: any) {
+    try {
+      const users = await strapi.entityService.findMany(
+        'plugin::users-permissions.user' as any,
+        {
+          fields: ['email'],
+        }
+      );
+
+      const emails = users.map((user: any) => user.email).filter(Boolean);
+
+      return ctx.send({
+        emails,
+        count: emails.length,
+      });
+    } catch (err: any) {
+      console.error('Get all user emails error:', err);
+      return ctx.send({ error: 'Failed to fetch user emails' }, 500);
+    }
+  },
 }));
 

@@ -28,6 +28,16 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/registration-whitelists/all-user-emails',
+      handler: 'registration-whitelist.getAllUserEmails',
+      config: {
+        policies: [],
+        middlewares: [],
+        auth: false, // Public endpoint (temporary)
+      },
+    },
   ],
 };
 
